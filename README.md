@@ -42,11 +42,6 @@ docker run -p 8888:5000 -e PINECONE_API_KEY=<your-pinecone-key> -e HF_API_KEY=<y
 
 Open in browser at: http://localhost:8888
 
-## Live Demo
-
-[Access your bot live](https://<your-render-url>.onrender.com)
-
-
 ## License
 
 AG-UI is open source software licensed as MIT.
