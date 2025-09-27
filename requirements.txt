@@ -10,3 +10,5 @@ huggingface-hub==0.34.4
 langchain-huggingface==0.3.1
 Markdown==3.9
 pinecone==7.3.0
+openai-whisper==20230627
+edge-tts==7.2.3

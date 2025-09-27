@@ -1,197 +1,436 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Medibot Chat</title>
-  <style>
-    /* General page styling */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #e0f7f9, #f5fdfd);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medibot Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #e0f7f9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
 
-    /* Header at the top */
-    header {
-      background: #009688;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
+        header {
+            background: #009688;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-    /* Chat container */
-    #chat-container {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+        #chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    /* Common message style */
-    .message {
-      max-width: 75%;
-      padding: 12px 16px;
-      border-radius: 12px;
-      word-wrap: break-word;
-    }
+        .message {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            position: relative;
+        }
 
-    /* Bot messages (left side) */
-    .bot-message {
-      background: #ffffff;
-      color: #333;
-      align-self: flex-start;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+        .bot-message {
+            background: #fff;
+            color: #333;
+            align-self: flex-start;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
 
-    /* User messages (right side) */
-    .user-message {
-      background: #26a69a;
-      color: white;
-      align-self: flex-end;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+        .user-message {
+            background: #26a69a;
+            color: white;
+            align-self: flex-end;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
 
-    /* Table styling inside bot messages */
-    .bot-message table {
-      border-collapse: collapse;
-      margin-top: 8px;
-      width: 100%;
-    }
+        .bot-message table {
+            border-collapse: collapse;
+            margin-top: 8px;
+            width: 100%;
+        }
 
-    .bot-message th, .bot-message td {
-      border: 1px solid #ccc;
-      padding: 6px 10px;
-      text-align: left;
-    }
+        .bot-message th,
+        .bot-message td {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            text-align: left;
+        }
 
-    .bot-message th {
-      background: #f1f1f1;
-      font-weight: bold;
-    }
+        .bot-message th {
+            background: #f1f1f1;
+            font-weight: bold;
+        }
 
-    /* Chat input form */
-    form {
-      display: flex;
-      justify-content: center;
-      padding: 14px 18px;
-      background: transparent;
-      border: none;
-    }
+        form {
+            display: flex;
+            justify-content: center;
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            gap: 10px;
+            align-items: center;
+            position: relative;
+        }
 
-    /* Input box wrapper */
-    .input-wrapper {
-      display: flex;
-      align-items: center;
-      background: #fff;
-      border-radius: 25px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 5px 10px;
-      width: 70%;
-      max-width: 700px;
-    }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 5px 10px;
+            width: 70%;
+            max-width: 700px;
+            gap: 8px;
+            position: relative;
+        }
 
-    /* Text input field */
-    input[type="text"] {
-      flex: 1;
-      padding: 14px 16px;
-      border: none;
-      outline: none;
-      font-size: 15px;
-      border-radius: 20px;
-    }
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            border-radius: 20px;
+        }
 
-    /* Send button */
-    button {
-      margin-left: 10px;
-      padding: 12px 20px;
-      border: none;
-      background: #009688;
-      color: white;
-      font-size: 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
+        button {
+            padding: 10px 16px;
+            border: none;
+            background: #009688;
+            color: white;
+            font-size: 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    button:hover {
-      background: #00796b;
-    }
-  </style>
+        button:hover {
+            background: #00796b;
+        }
+
+        button.active {
+            background: #004d40 !important;
+            color: #fff !important;
+            box-shadow: 0 0 6px #004d40 inset;
+        }
+
+        #mic-btn, #tts-btn, #stop-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            position: relative;
+        }
+
+        #stop-btn {
+            background: red;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #stop-btn::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: white;
+            display: block;
+            border-radius: 0;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #009688;
+            border-radius: 50%;
+            display: inline-block;
+            animation: blink 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+
+        .icon-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .icon-btn {
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-btn:hover::after {
+            content: attr(title);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .mini-stop {
+            width: 14px;
+            height: 14px;
+            background: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            margin-left: 6px;
+            cursor: pointer;
+        }
+
+        .mini-stop::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: white;
+            display: block;
+            border-radius: 0;
+        }
+    </style>
 </head>
 <body>
-  <!-- Page Header -->
-  <header>Medibot Chat</header>
 
-  <!-- Chat messages container -->
-  <div id="chat-container"></div>
+<header>Medibot Chat</header>
 
-  <!-- Chat input form -->
-  <form id="chat-form">
+<div id="chat-container"></div>
+
+<form id="chat-form">
     <div class="input-wrapper">
-      <input type="text" id="user-input" placeholder="Ask a question..." autocomplete="off">
-      <button type="submit">Send</button>
+        <input type="text" id="user-input" placeholder="Ask a question..." autocomplete="off">
+        <button type="button" id="mic-btn" title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
+        <button type="button" id="tts-btn" title="Voice Output"><i class="fa-solid fa-volume-high"></i></button>
+        <button type="submit">Send</button>
+        <button type="button" id="stop-btn" title="Stop Output"></button>
     </div>
-  </form>
+</form>
 
-  <script>
+<script>
     const chatContainer = document.getElementById("chat-container");
     const form = document.getElementById("chat-form");
     const userInput = document.getElementById("user-input");
+    const micBtn = document.getElementById("mic-btn");
+    const ttsBtn = document.getElementById("tts-btn");
+    const stopBtn = document.getElementById("stop-btn");
 
-    // Function to add messages to the chat
-    function addMessage(text, sender, isHTML = false) {
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+    let isMicActive = false, isTTSActive = false;
+    let mediaRecorder = null, audioChunks = [], audioPlayer = null, currentTTS = null;
 
-      // Render HTML for bot, plain text for user
-      if (isHTML) {
-        messageDiv.innerHTML = text;
-      } else {
-        messageDiv.innerText = text;
-      }
+    function addMessage(text, sender, isHTML = false, audioFile = null) {
+        const div = document.createElement("div");
+        div.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+        if (isHTML) div.innerHTML = text; else div.innerText = text;
+        chatContainer.appendChild(div);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight; // auto-scroll
+        if (sender === "bot") addBotIcons(div, text, audioFile);
+
+        if (sender === "bot" && audioFile) {
+            stopBtn.style.display = "flex"; 
+            audioPlayer = new Audio(audioFile);
+            audioPlayer.play();
+            audioPlayer.onended = () => { stopBtn.style.display = "none"; audioPlayer = null; };
+        }
+
+        return div;
     }
 
-    // Handle form submission
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const text = userInput.value.trim();
-      if (text === "") return;
+    function addBotIcons(div, text, audioFile) {
+        const icons = document.createElement("div");
+        icons.className = "icon-container";
 
-      // Show user message
-      addMessage(text, "user");
-      userInput.value = "";
+        const speaker = document.createElement("span");
+        speaker.className = "icon-btn";
+        speaker.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        speaker.title = "Play Audio";
+        icons.appendChild(speaker);
 
-      try {
-        // Send question to backend
-        const res = await fetch("/ask", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question: text })
-        });
+        const miniStop = document.createElement("span");
+        miniStop.className = "mini-stop";
+        miniStop.title = "Stop Output";
+        miniStop.style.display = "none";
+        icons.appendChild(miniStop);
 
-        const data = await res.json();
-        // Show bot response
-        if (data.answer) {
-          addMessage(data.answer, "bot", true);
-        } else {
-          addMessage("Error: Could not get response.", "bot");
-        }
-      } catch (err) {
-        addMessage("Error: " + err.message, "bot");
-      }
+        speaker.onclick = async () => {
+            miniStop.style.display = "flex";
+
+            if (audioFile) {
+                audioPlayer = new Audio(audioFile);
+                audioPlayer.play();
+                audioPlayer.onended = () => { miniStop.style.display = "none"; audioPlayer = null; };
+            } else {
+                try {
+                    const res = await fetch("/ask", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ question: text, tts: true })
+                    });
+                    const data = await res.json();
+                    if (data.audio) {
+                        audioPlayer = new Audio(data.audio);
+                        audioPlayer.play();
+                        audioPlayer.onended = () => { miniStop.style.display = "none"; audioPlayer = null; };
+                    }
+                } catch (err) {
+                    console.error("TTS error:", err);
+                    miniStop.style.display = "none";
+                }
+            }
+        };
+
+        miniStop.onclick = () => {
+            if (audioPlayer) { audioPlayer.pause(); audioPlayer = null; }
+            miniStop.style.display = "none";
+        };
+
+        const copyBtn = document.createElement("span");
+        copyBtn.className = "icon-btn";
+        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+        copyBtn.title = "Copy text";
+        copyBtn.onclick = () => { navigator.clipboard.writeText(text); alert("Copied!"); };
+        icons.appendChild(copyBtn);
+
+        div.appendChild(icons);
+    }
+
+    function addTypingIndicator() {
+        const indicator = document.createElement("div");
+        indicator.classList.add("message", "bot-message");
+        indicator.id = "typing-indicator";
+        indicator.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+        chatContainer.appendChild(indicator);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return indicator;
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.getElementById("typing-indicator");
+        if (indicator) indicator.remove();
+    }
+
+    stopBtn.onclick = () => {
+        if (audioPlayer) { audioPlayer.pause(); audioPlayer = null; }
+        stopBtn.style.display = "none";
+    };
+
+    micBtn.addEventListener("click", () => {
+        isMicActive = !isMicActive;
+        micBtn.classList.toggle("active", isMicActive);
+        if (isMicActive) startMic();
     });
-  </script>
+
+    ttsBtn.addEventListener("click", () => {
+        isTTSActive = !isTTSActive;
+        ttsBtn.classList.toggle("active", isTTSActive);
+    });
+
+    async function startMic() {
+        if (!navigator.mediaDevices || !window.MediaRecorder) { alert("Voice not supported"); return; }
+
+        audioChunks = [];
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+
+        mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const formData = new FormData();
+            formData.append("audio", audioBlob, "voice.wav");
+            formData.append("tts", isTTSActive);
+
+            const typing = addTypingIndicator();
+            const data = await sendRequest(formData, "/voice");
+            removeTypingIndicator();
+            if (data) addMessage(data.answer, "bot", true, data.audio);
+        };
+
+        mediaRecorder.start();
+        micBtn.disabled = true;
+        setTimeout(() => {
+            mediaRecorder.stop();
+            micBtn.disabled = false;
+            isMicActive = false;
+            micBtn.classList.remove("active");
+        }, 5000);
+    }
+
+    form.addEventListener("submit", async e => {
+        e.preventDefault();
+        if (isMicActive) return;
+
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        addMessage(text, "user");
+        userInput.value = "";
+
+        const typing = addTypingIndicator();
+        const data = await sendRequest({ question: text, tts: isTTSActive }, "/ask");
+        removeTypingIndicator();
+        if (data) addMessage(data.answer, "bot", true, data.audio);
+    });
+
+    async function sendRequest(data, endpoint = "/ask") {
+        try {
+            const res = await fetch(endpoint, {
+                method: "POST",
+                headers: endpoint === "/ask" ? { "Content-Type": "application/json" } : undefined,
+                body: endpoint === "/ask" ? JSON.stringify(data) : data
+            });
+            return await res.json();
+        } catch (err) {
+            addMessage("Error: " + err.message, "bot");
+        }
+    }
+</script>
+
 </body>
 </html>

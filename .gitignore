@@ -3,3 +3,6 @@ __pycache__
 .env
 medi-bot/
 .dockerignore
+/audio/
+/*.wav
+/*.mp3
